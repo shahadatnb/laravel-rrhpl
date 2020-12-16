@@ -68,11 +68,15 @@ class StoreReportController extends Controller
                     ->get();*/
                 $report = StoreItem::where('publish',1)->get();
                 //dd($report);
-                return view('store.report.stock')->withReport($report);
+                $title='Current Stock';
+                return view('store.report.stock',compact('title','report'));
                 break;
             case 'stock_period':
-                $items = StoreItem::where('publish',1)->get();
+                $items = StoreItem::where('publish',1)->orderBy('Item')->get();
                 $report = array();
+                $totalBalance = 0;
+                $totalCostIssue = 0;
+                $totalCostClosing = 0;
                 foreach($items as $key=>$item){
                     $opening = StoreTransaction::where('Item_id',$item->id)->whereDate('created_at','<',$this->fromDate())->where('mrr_id','>',0)->sum('qty');
                     $opening -= StoreTransaction::where('Item_id',$item->id)->whereDate('created_at','<',$this->fromDate())->where('srr_id','>',0)->sum('qty');
@@ -82,10 +86,18 @@ class StoreReportController extends Controller
                     $mrr = StoreTransaction::where('mrr_id','>',0)->where('Item_id',$item->id)->whereBetween('created_at', array($from_date, $to_date))->sum('qty');
                     $srr = StoreTransaction::where('srr_id','>',0)->where('Item_id',$item->id)->whereBetween('created_at', array($from_date, $to_date))->sum('qty');
 
-                    $report[$key] = ['id'=>$item->id,'opening'=>$opening,'receive'=>$mrr,'issue'=>$srr,'balance'=>$opening+$mrr,'price'=>$item->price,'costIssue'=>$item->price*$srr,'costClosing'=>$item->price*($opening+$mrr-$srr)];
+                    $balance = $opening+$mrr-$srr;
+                    $costIssue = $item->price*$srr;
+                    $costClosing = $item->price*$balance;
+                    //$totalBalance += $balance;
+                    $totalCostIssue += $costIssue;
+                    $totalCostClosing += $costClosing;
+                    $report[$key] = ['id'=>$item->id,'Item'=>$item->Item,'opening'=>$opening,'receive'=>$mrr,'issue'=>$srr,'balance'=>$balance,
+                    'price'=>$item->price,'costIssue'=>$costIssue,'costClosing'=>$costClosing];
                 }
-                dd($report);
-                return view('store.report.stock_period')->withReport($report);
+                //dd($report);
+                $title='Stock of a Period';
+                return view('store.report.stock_period',compact('report','totalBalance','totalCostIssue','totalCostClosing','title'));
                 break;
             case 'stock_date':
                 $report = DB::table('store_items')
@@ -93,7 +105,7 @@ class StoreReportController extends Controller
                         ->get();
                 //$report = StoreItem::all();
                 dd($report);
-                return view('store.report.stock')->withReport($report);
+                return view('store.report.stock',compact('title','report'));
                 break;
             case 'mrr_period':
                 $from_date = $this->getFromDate();
@@ -103,8 +115,8 @@ class StoreReportController extends Controller
                 ->get();//->groupBy('Item_id');
                 //$report = $r->groupBy('Item_id');
                 //dd($report);
-
-                return view('store.report.mrr_by_category')->withReport($report);
+                $title= trans('language.mrr').' of a Period';
+                return view('store.report.mrr_by_category',compact('title','report'));
                 break;
             case 'srr_period':
                 $from_date = $this->getFromDate();
@@ -119,7 +131,8 @@ class StoreReportController extends Controller
                 ->orderBy('store_transactions.created_at','desc')
                 ->get();
                 //dd($report);
-                return view('store.report.srr_by_recep')->withReport($report);
+                $title= trans('language.srr').' of a Period';
+                return view('store.report.srr_by_recep',compact('title','report'));
                 break;
             case 'item_ledger':
                 $from_date = $this->getFromDate();
@@ -133,12 +146,16 @@ class StoreReportController extends Controller
                         ->whereBetween('created_at', array($from_date, $to_date))
                         ->orderBy('created_at','desc')
                         ->get();
-                return view('store.report.item_ledger')->withReport($report)->withTotal($q-$q2)->withItemname($itemName->Item);
+                $total= $q-$q2;
+                $itemname = $itemName->Item;
+                $title='Unposted Bill';
+                return view('store.report.item_ledger',compact('title','report','total','itemname'));
                 break;
             case 'unposted_bill':
                 $mrr = StoreMrr::where('post',0)->get();
                 $srr = StoreSrr::where('post',0)->get();
-                return view('store.report.unposted_bill')->withMrr($mrr)->withSrr($srr);
+                $title='Unposted Bill';
+                return view('store.report.unposted_bill',compact('title','mrr','srr'));
                 break;
         }
 

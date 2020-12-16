@@ -1,4 +1,5 @@
 @extends('layouts.master_report')
+@section('report_title',$title)
 @section('from')
 @php  echo date_format(date_create(Session::get('from_date')),'d-M-Y') @endphp
 @endsection

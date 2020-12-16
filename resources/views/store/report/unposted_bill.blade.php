@@ -1,4 +1,5 @@
 @extends('layouts.master_report')
+@section('report_title',$title)
 @section('report')
 <h3>Unposted {{ trans('language.mrr') }}</h3>
 <table class="table">
