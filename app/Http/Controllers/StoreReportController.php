@@ -17,8 +17,8 @@ use DB;
 class StoreReportController extends Controller
 {
     public function __construct()
-    {    //Session::forget('from_date');
-        //Session::forget('to_date');    
+    {   
+        set_time_limit(8000000);
         if(!Session::has('from_date') || !Session::has('to_date')){
           Session::put('from_date', date('Y-m-d'));
           Session::put('to_date', date('Y-m-d'));
@@ -66,9 +66,26 @@ class StoreReportController extends Controller
                     ->join('store_mrrs', 'store_mrrs.id', '=', 'store_transactions.mrr_id')
                     ->select('store_items.*', 'store_mrrs.id as mrr_id', 'store_mrrs.created_at as mrr_date')
                     ->get();*/
-                $report = StoreItem::all();
+                $report = StoreItem::where('publish',1)->get();
                 //dd($report);
                 return view('store.report.stock')->withReport($report);
+                break;
+            case 'stock_period':
+                $items = StoreItem::where('publish',1)->get();
+                $report = array();
+                foreach($items as $key=>$item){
+                    $opening = StoreTransaction::where('Item_id',$item->id)->whereDate('created_at','<',$this->fromDate())->where('mrr_id','>',0)->sum('qty');
+                    $opening -= StoreTransaction::where('Item_id',$item->id)->whereDate('created_at','<',$this->fromDate())->where('srr_id','>',0)->sum('qty');
+                    
+                    $from_date = $this->getFromDate();
+                    $to_date = $this->getToDate();
+                    $mrr = StoreTransaction::where('mrr_id','>',0)->where('Item_id',$item->id)->whereBetween('created_at', array($from_date, $to_date))->sum('qty');
+                    $srr = StoreTransaction::where('srr_id','>',0)->where('Item_id',$item->id)->whereBetween('created_at', array($from_date, $to_date))->sum('qty');
+
+                    $report[$key] = ['id'=>$item->id,'opening'=>$opening,'receive'=>$mrr,'issue'=>$srr,'balance'=>$opening+$mrr,'price'=>$item->price,'costIssue'=>$item->price*$srr,'costClosing'=>$item->price*($opening+$mrr-$srr)];
+                }
+                dd($report);
+                return view('store.report.stock_period')->withReport($report);
                 break;
             case 'stock_date':
                 $report = DB::table('store_items')
@@ -152,8 +169,11 @@ class StoreReportController extends Controller
         return Session::get('to_date').' 23:59:59';
     }
 
-    private function getToDateL(){
-        return Session::get('to_date').' 23:59:59';
+    private function fromDate(){
+        return Session::get('from_date');
+    }
+    private function toDate(){
+        return Session::get('to_date');
     }
 
 

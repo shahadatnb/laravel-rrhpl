@@ -35,6 +35,8 @@ Route::get('password/reset/{token}', ['as' => 'password.reset','uses' => 'Auth\R
 
 Route::group(['middleware'=>'auth'], function(){
 	Route::get('/', 'HomeController@index')->name('home');
+	Route::get('/profile', 'ProfileController@index')->name('profile');
+	Route::post('/changePassSave', 'ProfileController@changePassSave')->name('changePassSave');
 });
 
 Route::group(['middleware'=>['auth','roles'],'roles'=>['admin']],function(){

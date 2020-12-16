@@ -69,6 +69,9 @@
             <td><a target="_blank" href="{{ route('store.report.view','cureent_stock')}}">Current Stock</a></td>
           </tr>
           <tr>
+            <td><a target="_blank" href="{{ route('store.report.view','stock_period')}}">Stock of a Period</a></td>
+          </tr>
+          <tr>
             <td><a target="_blank" href="{{ route('store.report.view','mrr_period')}}">{{ trans('language.mrr') }} of a Period</a></td>
           </tr>
           <tr>

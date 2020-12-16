@@ -1,4 +1,4 @@
-@extends('admin.admin-master')
+@extends('layouts.master')
 @section('title','User Profile')
 @section('content')
 
@@ -10,8 +10,8 @@
 </div>
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
-		{!! Form::open(['url' => 'passChange']) !!}
-			<input type="password" class="input-lg form-control" name="current-password" id="current-password" placeholder="Old Password" required="required" autocomplete="off">
+		{!! Form::open(['url' => 'changePassSave']) !!}
+			<input type="password" class="input-lg form-control" name="CurrentPassword" id="CurrentPassword" placeholder="Old Password" required="required" autocomplete="off">
 
 			<input type="password" class="input-lg form-control" name="password" id="password" placeholder="New Password" required="required" autocomplete="off">
 			<div class="row"><!--

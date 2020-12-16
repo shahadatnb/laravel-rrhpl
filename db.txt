@@ -1,0 +1,2 @@
+ALTER TABLE `store_items` CHANGE `publish` `publish` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1'; 
+UPDATE `store_items` SET `publish`=1 

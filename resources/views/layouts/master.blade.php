@@ -211,7 +211,7 @@
 	<footer class="pull-left footer col-md-12">
 		<p class="">
 			<hr class="divider">
-			Devoloped By <a href="http://professionalit.com">Professional IT</a>
+			Devoloped By <a href="http://asiancoder.com">AsianCoder</a>
 		</p>
 	</footer>
 </div>
