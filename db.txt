@@ -1,2 +1,1 @@
-ALTER TABLE `store_items` CHANGE `publish` `publish` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1'; 
-UPDATE `store_items` SET `publish`=1 
+ALTER TABLE `store_items` CHANGE `category_id` `category_id` SMALLINT NOT NULL, CHANGE `qty` `qty` DOUBLE(8,3) NOT NULL; 

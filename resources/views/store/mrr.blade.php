@@ -46,7 +46,8 @@
             <div class="col-md-9">
               <div class="form-group">
               {{ Form::label('item','Item Name') }}
-               <select name="item" id="" class="form-control select2">
+               <select name="item" id="item" class="form-control select2">
+                <option></option>
                   @foreach($items as $item)
                   <option value="{{ $item->id }}">{{ $item->Item }}</option>
                   @endforeach
@@ -200,7 +201,11 @@
 	{!! Html::script('public/js/parsley.min.js') !!}
 	{!! Html::script('public/js/select2.min.js') !!}
 	<script>
-		$('.select2').select2();
+    //$('.select2').select2();
+    $(".select2").select2({
+        placeholder: "",
+        allowClear: true
+    });
 		$(function () {
 	    //$("#example1").DataTable();
 	    $('#example2').DataTable({

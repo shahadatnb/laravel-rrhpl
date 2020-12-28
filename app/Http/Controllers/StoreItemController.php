@@ -122,12 +122,25 @@ class StoreItemController extends Controller
         return \Response::json($task);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function ShowHide($id){
+        $recipient=StoreItem::find($id);
+        if($recipient){
+
+            if ($recipient->publish == 1) {
+                if($recipient->qty > 0){
+                    Session::flash('warning','Sorry, Can`t Hide');
+                    return redirect()->back(); 
+                }
+                $recipient->publish=0;
+            }else{
+                $recipient->publish=1;
+            }
+            $recipient->save();
+        }
+        return redirect()->back();
+    }
+
+
     public function destroy($id)
     {
         $item=StoreItem::find($id);

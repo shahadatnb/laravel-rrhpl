@@ -121,7 +121,7 @@ class SrrController extends Controller
             $recipients[$sup->id]= $sup->name;
         }
         if($srr->post == 0){ $recipients['']= '------------'; }
-        $items = StoreItem::all();
+        $items = StoreItem::where('publish',1)->get();
         $StoreTransaction = StoreTransaction::where('srr_id', $id)->get();
         //dd($StoreTransaction);
         return view('store.srr')->withSrr($srr)->withItems($items)->withRecipients($recipients)->withTransaction($StoreTransaction);

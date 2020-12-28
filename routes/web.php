@@ -58,6 +58,7 @@ Route::group(['prefix'=>'store','middleware'=>['auth','roles'],'roles'=>['store'
 	Route::get('/update_stock', ['uses' => 'StoreReportController@stockUpdate', 'as' => 'store.updatestock']);
 
 	Route::get('/item', ['uses' => 'StoreItemController@index', 'as' => 'store.item']);
+	Route::get('/ShowHide/{id}', ['uses' => 'StoreItemController@ShowHide', 'as' => 'store.ShowHide']);
 	Route::get('/store-iten-export', ['uses' => 'StoreItemController@export', 'as' => 'store-iten-export']);
 	Route::get('/itemdestroy/{id}', ['uses' => 'StoreItemController@destroy', 'as' => 'store.item.destroy']);
 	Route::post('/store', ['uses' => 'StoreItemController@store', 'as' => 'store.item.store']);

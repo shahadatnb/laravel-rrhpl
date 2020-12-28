@@ -10,7 +10,7 @@
   <th>Last {{ trans('language.mrr') }} Date</th>
   <th>Unit</th>
   <th>Price</th>
-  <th>Current Stock</th>
+  <th>Stock</th>
   <th>Amount</th>
 </tr>
 </thead>
@@ -20,14 +20,13 @@
 <tr>
   <td>{{ $item->id }}</td>
   <td>{{ $item->Item }}</td>
-  <td>{{-- $item->srrInfo->id --}} 
-    @foreach($item->srrInfo as $srrInfo) 
-    {{ $srrInfo->id }}
-  @endforeach </td>
-  <td>{{-- $item->srrInfo->id --}} 
-    @foreach($item->srrInfo as $srrInfo) 
-    {{ $srrInfo->created_at->format('d-M-Y') }}
-  @endforeach </td>
+  @if($item->srrInfo->count()>0)
+  <td>{{ $item->srrInfo[0]->id }} </td>
+  <td>{{ $item->srrInfo[0]->created_at->format('d-M-Y') }}</td>
+  @else
+  <th></th>
+  <th></th>
+  @endif
   <td>{{ $item->unit }}</td>
   <td>{{ $item->price }}</td>
   <td>{{ $item->qty }}</td>

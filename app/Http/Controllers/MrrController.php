@@ -100,7 +100,7 @@ class MrrController extends Controller
         if($mrr->post == 0){
             $suppliers['']= '------------';
         }
-        $items = StoreItem::all();
+        $items = StoreItem::where('publish',1)->get();
         $StoreTransaction = StoreTransaction::where('mrr_id', $id)->get();
         //dd($StoreTransaction);
         return view('store.mrr')->withMrr($mrr)->withItems($items)->withSuppliers($suppliers)->withTransaction($StoreTransaction);

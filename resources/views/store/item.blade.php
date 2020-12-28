@@ -75,8 +75,10 @@
           <th>Item Name</th>
           <th>Category</th>
           <th>Unit</th>
-          <th>price</th>
-          <th>Current Stock</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Last {{ trans('language.mrr') }}<br>Memo No</th>
+          <th>Last {{ trans('language.mrr') }} Date</th>
           <th>#</th>
         </tr>
         </thead>
@@ -89,9 +91,24 @@
           <td>{{ $item->unit }}</td>
           <td>{{ $item->price }}</td>
           <td>{{ $item->qty }}</td>
+          @if($item->srrInfo->count()>0)
+            <td>{{ $item->srrInfo[0]->id }} </td>
+            <td>{{ $item->srrInfo[0]->created_at->format('d-M-Y') }}</td>
+          @else
+            <th></th>
+            <th></th>
+          @endif
           <td>
-            <button class="btn btn-warning btn-xs btn-detail open-modal" value="{{$item->id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
-            <a class="btn btn-danger btn-xs" href="{{route('store.item.destroy',$item->id)}}"><span class="glyphicon glyphicon-trash"></span></a></td>
+            <div class="btn-group">
+              <button class="btn btn-warning btn-xs btn-detail open-modal" value="{{$item->id}}"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+              <a class="btn btn-danger btn-xs" href="{{route('store.item.destroy',$item->id)}}"><span class="glyphicon glyphicon-trash"></span></a>
+              @if($item->publish == 1)
+                <a class="btn btn-info btn-xs" href="{{route('store.ShowHide',$item->id)}}">Show</a>
+              @else
+                <a class="btn btn-warning btn-xs" href="{{route('store.ShowHide',$item->id)}}">Hide</a>
+              @endif
+            </div>
+          </td>
         </tr>
         @endforeach
         </tbody>
