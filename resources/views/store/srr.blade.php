@@ -59,7 +59,7 @@
             <div class="col-md-8">
               <div class="form-group">
                 {{ Form::label('qty','Quantity') }}
-                {{ Form::number('qty',null,array('class'=>'form-control','required'=>'')) }}
+                {{ Form::number('qty',null,array('class'=>'form-control','required'=>'','step'=>'any')) }}
               </div>
             </div>
             <div class="col-md-4">
