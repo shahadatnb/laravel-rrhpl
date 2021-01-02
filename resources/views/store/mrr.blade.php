@@ -64,13 +64,13 @@
             <div class="col-md-4">
               <div class="form-group">
                 {{ Form::label('qty','Quantity') }}
-                {{ Form::number('qty',null,array('class'=>'form-control','required'=>'')) }}
+                {{ Form::number('qty',null,array('class'=>'form-control','required'=>'','step'=>'any')) }}
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 {{ Form::label('price','Price') }}
-                {{ Form::number('price',null,array('class'=>'form-control','required'=>'')) }}
+                {{ Form::number('price',null,array('class'=>'form-control','required'=>'','step'=>'any')) }}
               </div>
             </div>
             <div class="col-md-4">
